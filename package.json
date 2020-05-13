@@ -10,21 +10,37 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.5",
+    "antd": "^4.2.2",
+    "history": "^4.10.1",
+    "moment": "^2.25.3",
+    "obyte": "^0.1.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "prettier --write 'src/**/*.(tsx|ts)'"
   },
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "react/jsx-no-target-blank": 0
+      "react/jsx-no-target-blank": 0,
+      "max-len": ["error", { "code": 80 }, { "ignoreComments": true }],
+      "quotes": [2, "double"],
+      "semi": [2, "always"],
+      "no-mixed-spaces-and-tabs": "error",
+      "space-before-function-paren": "error"
     }
   },
   "browserslist": {
@@ -38,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
   }
 }

@@ -10,6 +10,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.8",
     "@types/react-router-dom": "^5.1.5",
     "antd": "^4.2.2",
     "history": "^4.10.1",
@@ -39,8 +40,7 @@
       "max-len": ["error", { "code": 80 }, { "ignoreComments": true }],
       "quotes": [2, "double"],
       "semi": [2, "always"],
-      "no-mixed-spaces-and-tabs": "error",
-      "space-before-function-paren": "error"
+      "no-mixed-spaces-and-tabs": "error"
     }
   },
   "browserslist": {

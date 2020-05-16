@@ -1,0 +1,14 @@
+
+.content{
+    padding: 24px;
+    margin: 0;
+    min-height: calc(100vh - 64px);
+    max-width: 100vw;
+    background-color: #fff;
+}
+
+.contentWrap{
+    padding: 0 24px 24px;
+}
+
+

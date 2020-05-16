@@ -1,0 +1,30 @@
+.header{
+    max-width: 100%;
+    display: flex;
+    overflow: hidden;
+}
+
+.serviceName{
+    color: #fff;
+    font-size: 18px;
+    margin-right: 24px;
+    white-space: nowrap;
+}
+
+.select{
+    width: 250px;
+}
+
+.selectWrap{
+    max-width: 250px;
+}
+
+.menu{
+    width: 100%;
+}
+
+@media (max-width: 760px){
+    .select{
+        display: none;
+    }
+}

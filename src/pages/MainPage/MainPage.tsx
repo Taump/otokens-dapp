@@ -1,5 +1,6 @@
 import React from "react";
+import { MainLayout } from "../../components/MainLayout/MainLayout";
 
 export const MainPage: React.FC = () => {
-  return <div>Main page</div>;
+  return <MainLayout>Main page</MainLayout>;
 };

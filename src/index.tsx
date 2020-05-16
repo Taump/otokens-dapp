@@ -11,12 +11,12 @@ import { AppRouter } from "./AppRouter";
 const { persistor, store } = configureStore();
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <AppRouter />
       </PersistGate>
     </Provider>
-  </React.StrictMode>,
+  </>,
   document.getElementById("root")
 );

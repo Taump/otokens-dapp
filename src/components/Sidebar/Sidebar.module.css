@@ -1,0 +1,27 @@
+.sider{
+    padding-top: 24px;
+    padding-bottom: 24px;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.siderWrap{
+    padding-left: 24px;
+    padding-right: 24px;
+    transition: 1s;
+}
+
+@media (max-width: 1200px){
+    .sider{
+        position: fixed;
+        left: 0;
+        top: 0;
+        border-right: 1px solid #ddd;
+        max-width: 100% !important;
+        min-width: 100% ;
+    }
+}
+
+:global(.ant-layout-sider-collapsed){
+    border-right: none !important;
+}

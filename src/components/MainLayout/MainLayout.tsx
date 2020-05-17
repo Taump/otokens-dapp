@@ -15,7 +15,7 @@ export const MainLayout: React.FC<IProps> = ({ children }) => {
   return (
     <Layout>
       <Header />
-      <Layout>
+      <Layout className={styles.sidebarWrap}>
         <Sidebar />
         <Layout className={styles.contentWrap}>
           <Content className={styles.content}>{children}</Content>

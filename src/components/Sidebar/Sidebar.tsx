@@ -29,12 +29,20 @@ export const Sidebar: React.FC = () => {
   useEffect(() => {
     if (wrapperHeadSidebar.current) {
       if (wrapperHeadSidebar.current.clientHeight) {
-        setSelectorHeight(
-          height - wrapperHeadSidebar.current.clientHeight - 64 - 48 - 48
-        );
+        if (width > 1200) {
+          setSelectorHeight(
+            height -
+              wrapperHeadSidebar.current.clientHeight -
+              (64 + 48 + 48 + 48 + 48)
+          );
+        } else {
+          setSelectorHeight(
+            height - wrapperHeadSidebar.current.clientHeight - (64 + 48 + 48)
+          );
+        }
       }
     }
-  }, [height, setSelectorHeight, wrapperHeadSidebar]);
+  }, [height, width, setSelectorHeight, wrapperHeadSidebar]);
 
   return (
     <Sider

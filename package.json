@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
+    "@types/lodash.padend": "^4.6.6",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
@@ -14,6 +16,7 @@
     "@types/react-router-dom": "^5.1.5",
     "antd": "^4.2.2",
     "history": "^4.10.1",
+    "lodash.padend": "^4.6.1",
     "moment": "^2.25.3",
     "obyte": "^0.1.8",
     "react": "^16.13.1",
@@ -37,9 +40,23 @@
     "extends": "react-app",
     "rules": {
       "react/jsx-no-target-blank": 0,
-      "max-len": ["error", { "code": 80 }, { "ignoreComments": true }],
-      "quotes": [2, "double"],
-      "semi": [2, "always"],
+      "max-len": [
+        "error",
+        {
+          "code": 80
+        },
+        {
+          "ignoreComments": true
+        }
+      ],
+      "quotes": [
+        2,
+        "double"
+      ],
+      "semi": [
+        2,
+        "always"
+      ],
       "no-mixed-spaces-and-tabs": "error"
     }
   },

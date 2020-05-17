@@ -1,0 +1,29 @@
+.tokenHeader{
+    display: flex;
+    padding: 8px 5px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    background: #F9F9F9;
+}
+
+.assetOrSymbol{
+    width: 40%;
+}
+
+.support{
+    width: 25%;
+}
+
+.rivalSupport{
+    width: 25%;
+}
+
+.rate{
+    width: 10%;
+}
+
+@media (max-width: 780px) {
+    .tokenHeader{
+        font-size: 10px;
+    }
+}

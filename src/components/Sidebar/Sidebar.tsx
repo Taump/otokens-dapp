@@ -1,32 +1,59 @@
-import React, { useState } from "react";
-import styles from "./Sidebar.module.css";
+import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Layout } from "antd";
+
+import styles from "./Sidebar.module.css";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { Search } from "./components/Search/Search";
+import { SelectorTabs } from "./components/SelectorTabs/SelectorTabs";
+import { HeaderSidebar } from "./components/HeaderSidebar/HeaderSidebar";
+
 const { Sider } = Layout;
 
 export const Sidebar: React.FC = () => {
-  const [width] = useWindowSize();
+  const [width, height] = useWindowSize();
+  const wrapperHeadSidebar = useRef<HTMLDivElement>(null);
   const [isCollapse, setCollapse] = useState(false);
+  const [selectorHeight, setSelectorHeight] = useState(0);
 
   let sidebarWidth: number = 400;
 
+  // Calculating the width of the sidebar
   if (width >= 480) {
     sidebarWidth = 400;
   } else if (width < 480) {
     sidebarWidth = 280;
   }
 
+  // Calculating the height of the selector block
+  useEffect(() => {
+    if (wrapperHeadSidebar.current) {
+      if (wrapperHeadSidebar.current.clientHeight) {
+        setSelectorHeight(
+          height - wrapperHeadSidebar.current.clientHeight - 64 - 48 - 48
+        );
+      }
+    }
+  }, [height, setSelectorHeight, wrapperHeadSidebar]);
+
   return (
     <Sider
       width={sidebarWidth}
       breakpoint="xl"
       collapsedWidth="0"
+      collapsible={isCollapse}
       theme="light"
       onCollapse={(data) => {
         setCollapse(data);
       }}
       className={styles.sider}
     >
+      {!isCollapse && width < 1200 && (
+        <Overlay>
+          <div className={styles.overlay} />
+        </Overlay>
+      )}
+
       <div
         className={styles.siderWrap}
         style={{
@@ -34,11 +61,18 @@ export const Sidebar: React.FC = () => {
           opacity: isCollapse ? 0 : 1,
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, accusamus
-        adipisci consequatur dicta dolor doloribus eaque eius harum iusto libero
-        placeat quaerat quis, quo ratione, repudiandae rerum saepe sapiente
-        sunt?
+        <div ref={wrapperHeadSidebar}>
+          <HeaderSidebar />
+          <Search />
+        </div>
+        <div className={styles.selectorWrap}>
+          <SelectorTabs height={selectorHeight} />
+        </div>
       </div>
     </Sider>
   );
 };
+
+const portalDom: any = document.getElementById("portal");
+
+const Overlay = (props: any) => createPortal(props.children, portalDom);

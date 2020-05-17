@@ -2,5 +2,5 @@ import React from "react";
 import { MainLayout } from "../../components/MainLayout/MainLayout";
 
 export const MainPage: React.FC = () => {
-  return <MainLayout>Main page</MainLayout>;
+  return <MainLayout>test</MainLayout>;
 };

@@ -1,0 +1,40 @@
+.tokenItem{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 8px 5px;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.tokenItem:hover{
+    background-color: #F9F9F9;
+}
+
+.assetOrSymbol{
+    width: 40%;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+}
+
+.support{
+    width: 25%;
+}
+
+.rivalSupport{
+    width: 25%;
+}
+
+.rateWrap{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+.dispute{
+    color: red;
+}
+
+.notDispute{
+    color: green;
+}

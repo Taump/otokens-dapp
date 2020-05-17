@@ -1,0 +1,29 @@
+.option{
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.option:hover{
+    background: #002549 ;
+    color: #ffffff;
+}
+
+.select{
+    width: 300px;
+    color: #fff;
+}
+
+.option:global(.ant-select-item-option-selected){
+    background: #002549;
+    color: #ffffff;
+}
+
+.option:global(.ant-select-item-option-active){
+    background-color: #002549;
+    color: #ffffff;
+}
+
+.dropdown{
+    background-color: #001529;
+    color: #ffffff;
+}

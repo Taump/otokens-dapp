@@ -1,9 +1,10 @@
 .tokenHeader{
     display: flex;
-    padding: 8px 5px;
+    padding: 8px 13px 8px 5px;
     margin-bottom: 8px;
     font-size: 12px;
     background: #F9F9F9;
+    justify-content: flex-start;
 }
 
 .assetOrSymbol{
@@ -19,7 +20,7 @@
 }
 
 .rate{
-    width: 10%;
+    width: calc(10% - 10px);
 }
 
 @media (max-width: 780px) {

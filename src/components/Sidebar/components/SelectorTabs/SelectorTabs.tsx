@@ -2,6 +2,7 @@ import { TokenHeader } from "../TokenHeader/TokenHeader";
 import { TokenItem } from "../TokenItem/TokenItem";
 import { Tabs } from "antd";
 import React, { ReactComponentElement } from "react";
+import Scrollbar from "react-scrollbars-custom";
 
 const { TabPane } = Tabs;
 
@@ -33,10 +34,9 @@ export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
     >
       <TabPane tab="ALL" key="1">
         <TokenHeader />
-        <div
+        <Scrollbar
           style={{
-            overflowY: "scroll",
-            maxHeight: props.height,
+            height: props.height,
           }}
         >
           {Tokens}
@@ -47,7 +47,7 @@ export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
             rate={true}
             isDispute={false}
           />
-        </div>
+        </Scrollbar>
       </TabPane>
       <TabPane tab="FAVOURITES" key="2">
         <TokenHeader />

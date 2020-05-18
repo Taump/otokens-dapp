@@ -5,6 +5,11 @@
     padding: 8px 5px;
     border-bottom: 1px solid #F5F5F5;
     cursor: pointer;
+    justify-content: flex-start;
+}
+
+.tokenItem:last-child{
+    border-bottom: none;
 }
 
 .tokenItem:hover{
@@ -26,7 +31,7 @@
 }
 
 .rateWrap{
-    width: 10%;
+    width: calc(10% - 10px);
     display: flex;
     justify-content: center;
 }
@@ -37,4 +42,8 @@
 
 .notDispute{
     color: green;
+}
+
+.scroll{
+    width: 10px;
 }

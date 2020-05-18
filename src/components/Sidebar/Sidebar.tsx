@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Layout } from "antd";
 
@@ -7,6 +7,7 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { Search } from "./components/Search/Search";
 import { SelectorTabs } from "./components/SelectorTabs/SelectorTabs";
 import { HeaderSidebar } from "./components/HeaderSidebar/HeaderSidebar";
+import useThrottledEffect from "../../hooks/useThrottledEffect";
 
 const { Sider } = Layout;
 
@@ -25,24 +26,27 @@ export const Sidebar: React.FC = () => {
     sidebarWidth = 280;
   }
 
-  // Calculating the height of the selector block
-  useEffect(() => {
-    if (wrapperHeadSidebar.current) {
-      if (wrapperHeadSidebar.current.clientHeight) {
-        if (width > 1200) {
-          setSelectorHeight(
-            height -
-              wrapperHeadSidebar.current.clientHeight -
-              (64 + 48 + 48 + 48 + 48)
-          );
-        } else {
-          setSelectorHeight(
-            height - wrapperHeadSidebar.current.clientHeight - (64 + 48 + 48)
-          );
+  useThrottledEffect(
+    () => {
+      if (wrapperHeadSidebar.current) {
+        if (wrapperHeadSidebar.current.clientHeight) {
+          if (width > 1200) {
+            setSelectorHeight(
+              height -
+                wrapperHeadSidebar.current.clientHeight -
+                (64 + 48 + 48 + 48 + 48)
+            );
+          } else {
+            setSelectorHeight(
+              height - wrapperHeadSidebar.current.clientHeight - (64 + 48 + 48)
+            );
+          }
         }
       }
-    }
-  }, [height, width, setSelectorHeight, wrapperHeadSidebar]);
+    },
+    500,
+    [height, width, setSelectorHeight, wrapperHeadSidebar]
+  );
 
   return (
     <Sider

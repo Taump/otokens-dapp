@@ -1,6 +1,10 @@
 import React from "react";
 import { Button, Input } from "antd";
-import { SortAscendingOutlined, RiseOutlined } from "@ant-design/icons";
+import {
+  SortAscendingOutlined,
+  RiseOutlined,
+  FallOutlined,
+} from "@ant-design/icons";
 
 import styles from "./Search.module.css";
 
@@ -19,7 +23,7 @@ export const Search = () => {
         {/*<FallOutlined />*/}
         <Button
           type="link"
-          icon={<RiseOutlined className={styles.switchersBtn} />}
+          icon={<FallOutlined className={styles.switchersBtn} />}
         />
       </div>
     </div>

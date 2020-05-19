@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, MutableRefObject, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Layout } from "antd";
 
@@ -11,12 +11,15 @@ import useThrottledEffect from "../../hooks/useThrottledEffect";
 
 const { Sider } = Layout;
 
-export const Sidebar: React.FC = () => {
+interface ISidebar {
+  children?: ReactNode;
+}
+
+export const Sidebar: React.FC<ISidebar> = (props) => {
   const [width, height] = useWindowSize();
   const wrapperHeadSidebar = useRef<HTMLDivElement>(null);
   const [isCollapse, setCollapse] = useState(false);
   const [selectorHeight, setSelectorHeight] = useState(0);
-
   let sidebarWidth: number = 400;
 
   // Calculating the width of the sidebar
@@ -34,7 +37,7 @@ export const Sidebar: React.FC = () => {
             setSelectorHeight(
               height -
                 wrapperHeadSidebar.current.clientHeight -
-                (64 + 48 + 48 + 48 + 48)
+                (64 + 48 + 48 + 48 + 24)
             );
           } else {
             setSelectorHeight(
@@ -45,7 +48,13 @@ export const Sidebar: React.FC = () => {
       }
     },
     500,
-    [height, width, setSelectorHeight, wrapperHeadSidebar]
+    [
+      height,
+      width,
+      setSelectorHeight,
+      wrapperHeadSidebar,
+      document.body.scrollHeight,
+    ]
   );
 
   return (

@@ -3,7 +3,7 @@ export interface IActionData {
   payload?: string | number | object | null;
 }
 
-export interface IStateData {
+export interface IDataStore {
   data: object;
   loaded: boolean;
 }

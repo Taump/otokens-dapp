@@ -1,12 +1,12 @@
-import { IActionData, IStateData } from "./data.types";
+import { IActionData, IDataStore } from "./data.types";
 
-const initialState: IStateData = {
+const initialState: IDataStore = {
   data: {},
   loaded: false,
 };
 
 export const dataReducer = (
-  state: IStateData = initialState,
+  state: IDataStore = initialState,
   action: IActionData
 ) => {
   switch (action.type) {

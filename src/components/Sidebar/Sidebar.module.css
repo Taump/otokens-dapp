@@ -1,10 +1,10 @@
 .sider{
     padding-top: 24px;
-    padding-bottom: 24px;
-    /*box-sizing: border-box;*/
-    height: calc( 100% - 24px);
-    z-index: 9999;
-    margin-bottom: 24px;
+    box-sizing: border-box;
+    min-height: calc( 100% - 64px);
+    z-index: 999;
+    position: fixed;
+    top:64px;
 }
 
 .siderWrap{
@@ -27,7 +27,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 99;
     max-height: 100vh;
     overflow: hidden;
 }

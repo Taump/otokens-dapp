@@ -37,6 +37,7 @@ export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
         <Scrollbar
           style={{
             height: props.height,
+            // height: "100%",
           }}
         >
           {Tokens}
@@ -50,38 +51,52 @@ export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
         </Scrollbar>
       </TabPane>
       <TabPane tab="FAVOURITES" key="2">
-        <TokenHeader />
-        <TokenItem
-          assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-          support={5325.433}
-          rivalSupport={324}
-          rate={true}
-          isDispute={false}
-        />
+        <Scrollbar
+          style={{
+            height: props.height,
+            // height: "100%",
+          }}
+        >
+          <TokenHeader />
+          <TokenItem
+            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
+            support={5325.433}
+            rivalSupport={324}
+            rate={true}
+            isDispute={false}
+          />
+        </Scrollbar>
       </TabPane>
       <TabPane tab="DISPUTED" key="3">
-        <TokenHeader />
-        <TokenItem
-          assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-          support={5325.433}
-          rivalSupport={324}
-          rate={true}
-          isDispute={false}
-        />
-        <TokenItem
-          assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-          support={5325.433}
-          rivalSupport={324}
-          rate={false}
-          isDispute={true}
-        />
-        <TokenItem
-          assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-          support={5325.433}
-          rivalSupport={324}
-          rate={false}
-          isDispute={false}
-        />
+        <Scrollbar
+          style={{
+            height: props.height,
+            // height: "100%",
+          }}
+        >
+          <TokenHeader />
+          <TokenItem
+            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
+            support={5325.433}
+            rivalSupport={324}
+            rate={true}
+            isDispute={false}
+          />
+          <TokenItem
+            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
+            support={5325.433}
+            rivalSupport={324}
+            rate={false}
+            isDispute={true}
+          />
+          <TokenItem
+            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
+            support={5325.433}
+            rivalSupport={324}
+            rate={false}
+            isDispute={false}
+          />
+        </Scrollbar>
       </TabPane>
     </Tabs>
   );

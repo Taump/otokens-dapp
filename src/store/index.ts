@@ -3,9 +3,11 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { dataReducer } from "./reducers/data";
+import { modalsReducer } from "./reducers/modals";
 
 const rootReducer = combineReducers({
   data: dataReducer,
+  modals: modalsReducer
 });
 
 const persistConfig = {

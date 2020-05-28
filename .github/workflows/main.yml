@@ -23,6 +23,6 @@ jobs:
             cd otokens-dapp
             git pull
             rm yarn.lock
-            rm package.json
+            rm package-lock.json
             yarn
             yarn build

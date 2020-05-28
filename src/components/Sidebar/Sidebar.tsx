@@ -1,4 +1,4 @@
-import React, { useState, useRef, MutableRefObject, ReactNode } from "react";
+import React, { useState, useRef, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Layout } from "antd";
 
@@ -8,6 +8,16 @@ import { Search } from "./components/Search/Search";
 import { SelectorTabs } from "./components/SelectorTabs/SelectorTabs";
 import { HeaderSidebar } from "./components/HeaderSidebar/HeaderSidebar";
 import useThrottledEffect from "../../hooks/useThrottledEffect";
+import { useSelector } from "react-redux";
+// eslint-disable-next-line max-len
+import { getCurrentSymbolList } from "../../store/selectors/getCurrentSymbolList";
+import { IStore } from "../../store/reducers/index.interface";
+// eslint-disable-next-line max-len
+import { getCurrentDisputeSymbolList } from "../../store/selectors/getCurrentDisputeSymbolList";
+// eslint-disable-next-line max-len
+import { getCurrentFavoriteSymbolList } from "../../store/selectors/getCurrentFavoriteSymbolList";
+// eslint-disable-next-line max-len
+import { ICurrentSymbol } from "../../store/selectors/interfaces/currentSymbol.interface";
 
 const { Sider } = Layout;
 
@@ -20,6 +30,20 @@ export const Sidebar: React.FC<ISidebar> = (props) => {
   const wrapperHeadSidebar = useRef<HTMLDivElement>(null);
   const [isCollapse, setCollapse] = useState(false);
   const [selectorHeight, setSelectorHeight] = useState(0);
+  const [search, setSearch] = useState("");
+
+  const currentSymbolList: ICurrentSymbol[] = useSelector(
+    getCurrentSymbolList
+  ).filter((current) => current.symbol.indexOf(search.toUpperCase()) !== -1);
+
+  const currentDisputeSymbolList: ICurrentSymbol[] = useSelector(
+    getCurrentDisputeSymbolList
+  ).filter((current) => current.symbol.indexOf(search.toUpperCase()) !== -1);
+
+  const currentFavoriteSymbolList: ICurrentSymbol[] = useSelector(
+    getCurrentFavoriteSymbolList
+  ).filter((current) => current.symbol.indexOf(search.toUpperCase()) !== -1);
+
   let sidebarWidth: number = 400;
 
   // Calculating the width of the sidebar
@@ -74,7 +98,6 @@ export const Sidebar: React.FC<ISidebar> = (props) => {
           <div className={styles.overlay} />
         </Overlay>
       )}
-
       <div
         className={styles.siderWrap}
         style={{
@@ -84,10 +107,16 @@ export const Sidebar: React.FC<ISidebar> = (props) => {
       >
         <div ref={wrapperHeadSidebar}>
           <HeaderSidebar />
-          <Search />
+          <Search value={search} onChange={setSearch} />
         </div>
         <div className={styles.selectorWrap}>
-          <SelectorTabs height={selectorHeight} />
+          <SelectorTabs
+            currentList={currentSymbolList}
+            currentDisputeList={currentDisputeSymbolList}
+            currentFavoriteList={currentFavoriteSymbolList}
+            height={selectorHeight}
+            width={width}
+          />
         </div>
       </div>
     </Sider>

@@ -3,26 +3,37 @@ import { TokenItem } from "../TokenItem/TokenItem";
 import { Tabs } from "antd";
 import React, { ReactComponentElement } from "react";
 import Scrollbar from "react-scrollbars-custom";
+import padEnd from "lodash.padend";
+// eslint-disable-next-line max-len
+import { ICurrentSymbol } from "../../../../store/selectors/interfaces/currentSymbol.interface";
 
 const { TabPane } = Tabs;
 
 export interface ISelectorTabs {
   height: number;
+  width: number;
+  currentList: ICurrentSymbol[];
+  currentDisputeList: ICurrentSymbol[];
+  currentFavoriteList: ICurrentSymbol[];
 }
 
 export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
-  const Tokens: ReactComponentElement<any>[] = new Array(40);
-  Tokens.fill(
-    <TokenItem
-      assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-      support={5325.433}
-      rivalSupport={324}
-      rate={true}
-      isDispute={false}
-    />,
-    0,
-    40
-  );
+  const cutSymbolOrAsset = (symbolOrAsset: string) => {
+    if (props.width <= 480) {
+      if (symbolOrAsset.length >= 11) {
+        return padEnd(symbolOrAsset.substring(0, 11), 14, "...");
+      } else {
+        return symbolOrAsset;
+      }
+    } else {
+      if (symbolOrAsset.length >= 18) {
+        return padEnd(symbolOrAsset.substring(0, 15), 18, "...");
+      } else {
+        return symbolOrAsset;
+      }
+    }
+  };
+
   return (
     <Tabs
       defaultActiveKey="1"
@@ -32,70 +43,64 @@ export const SelectorTabs: React.FC<ISelectorTabs> = (props) => {
         userSelect: "none",
       }}
     >
-      <TabPane tab="ALL" key="1">
+      <TabPane tab="ALL" key="1" forceRender={true}>
         <TokenHeader />
         <Scrollbar
           style={{
             height: props.height,
-            // height: "100%",
           }}
         >
-          {Tokens}
-          <TokenItem
-            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-            support={5325.433}
-            rivalSupport={324}
-            rate={true}
-            isDispute={false}
-          />
+          {props.currentList.map((current) => (
+            <TokenItem
+              cutAssetOrSymbol={cutSymbolOrAsset(current.symbol)}
+              assetOrSymbol={current.symbol}
+              support={current.currentSupport}
+              rivalSupport={current.expiry_ts ? current.largestSupport : null}
+              rate={current.isFavorite}
+              isDispute={current.currentAsset !== current.largestAsset}
+              key={"token-" + current.symbol}
+            />
+          ))}
         </Scrollbar>
       </TabPane>
-      <TabPane tab="FAVOURITES" key="2">
+      <TabPane tab="FAVOURITES" key="2" forceRender={true}>
         <Scrollbar
           style={{
             height: props.height,
-            // height: "100%",
           }}
         >
           <TokenHeader />
-          <TokenItem
-            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-            support={5325.433}
-            rivalSupport={324}
-            rate={true}
-            isDispute={false}
-          />
+          {props.currentFavoriteList.map((current) => (
+            <TokenItem
+              cutAssetOrSymbol={cutSymbolOrAsset(current.symbol)}
+              assetOrSymbol={current.symbol}
+              support={current.currentSupport}
+              rivalSupport={current.expiry_ts ? current.largestSupport : null}
+              rate={current.isFavorite}
+              isDispute={current.currentAsset !== current.largestAsset}
+              key={"token-" + current.symbol}
+            />
+          ))}
         </Scrollbar>
       </TabPane>
-      <TabPane tab="DISPUTED" key="3">
+      <TabPane tab="DISPUTED" key="3" forceRender={true}>
         <Scrollbar
           style={{
             height: props.height,
-            // height: "100%",
           }}
         >
           <TokenHeader />
-          <TokenItem
-            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-            support={5325.433}
-            rivalSupport={324}
-            rate={true}
-            isDispute={false}
-          />
-          <TokenItem
-            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-            support={5325.433}
-            rivalSupport={324}
-            rate={false}
-            isDispute={true}
-          />
-          <TokenItem
-            assetOrSymbol="fl6fdsfnsd32kjkKJFNDKfsdfkdlsfkdsf"
-            support={5325.433}
-            rivalSupport={324}
-            rate={false}
-            isDispute={false}
-          />
+          {props.currentDisputeList.map((current) => (
+            <TokenItem
+              assetOrSymbol={current.symbol}
+              cutAssetOrSymbol={cutSymbolOrAsset(current.symbol)}
+              support={current.currentSupport}
+              rivalSupport={current.expiry_ts ? current.largestSupport : null}
+              rate={current.isFavorite}
+              isDispute={current.currentAsset !== current.largestAsset}
+              key={"token-" + current.symbol}
+            />
+          ))}
         </Scrollbar>
       </TabPane>
     </Tabs>

@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Form, Input, Modal, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { IStore } from "../../store/reducers/index.types";
-import { IModals } from "../../store/reducers/modals.types";
 import { addSupportClose } from "../../store/actions/modals/addSupport";
+import { IStore } from "../../store/reducers/index.interface";
+import { IModals } from "../../store/reducers/modals.interface";
 
 const { Option } = Select;
 
@@ -46,7 +46,6 @@ export const AddSupportModal: React.FC = () => {
       >
         <Form size="large">
           <Form.Item>
-            {/* eslint-disable-next-line max-len */}
             <Input
               placeholder="Your deposit in support of this symbol (in GBYTEs)"
               suffix="GB"

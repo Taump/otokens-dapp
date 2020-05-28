@@ -1,10 +1,11 @@
-import { IActionModals, IModals, IModalsStore } from "./modals.types";
 import {
   MODAL_OPEN_CREATE_TOKEN,
   MODAL_CLOSE_CREATE_TOKEN,
   MODAL_CLOSE_ADD_SUPPORT,
   MODAL_OPEN_ADD_SUPPORT,
 } from "../types/modals";
+import { IModals, IModalsStore, IActionModals } from "./modals.interface";
+import { AnyAction } from "redux";
 
 const initModalProperty: IModals = {
   visible: false,
@@ -20,9 +21,10 @@ const initialState: IModalsStore = {
   },
 };
 
+//IActionModals
 export const modalsReducer = (
   state: IModalsStore = initialState,
-  action: IActionModals
+  action: AnyAction
 ) => {
   switch (action.type) {
     case MODAL_OPEN_CREATE_TOKEN: {

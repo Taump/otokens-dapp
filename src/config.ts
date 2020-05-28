@@ -1,0 +1,4 @@
+export default {
+  TESTNET: true,
+  ADDRESS: "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
+};

@@ -6,11 +6,13 @@ import { PersistGate } from "redux-persist/integration/react";
 import "antd/dist/antd.css";
 import "./index.css";
 
+import "./services/socket";
+
 import configureStore from "./store";
 
 import { AppRouter } from "./AppRouter";
 
-const { persistor, store } = configureStore();
+export const { persistor, store } = configureStore();
 
 ReactDOM.render(
   <>

@@ -1,0 +1,2 @@
+export const ADD_FAVORITE_SYMBOL: string = "ADD_FAVORITE_SYMBOL";
+export const REMOVE_FAVORITE_SYMBOL: string = "REMOVE_FAVORITE_SYMBOL";

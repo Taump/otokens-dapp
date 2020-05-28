@@ -22,5 +22,6 @@ jobs:
           script: |
             cd otokens-dapp
             git pull
+            rm -rf yarn.lock
             yarn
             yarn build

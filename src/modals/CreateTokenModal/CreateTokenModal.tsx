@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Form, Input, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { IStore } from "../../store/reducers/index.types";
-import { IModals } from "../../store/reducers/modals.types";
 import { createTokenClose } from "../../store/actions/modals/createToken";
+import { IModals } from "../../store/reducers/modals.interface";
+import { IStore } from "../../store/reducers/index.interface";
 
 const { TextArea } = Input;
 

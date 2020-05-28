@@ -22,5 +22,5 @@ jobs:
           script: |
             cd otokens-dapp
             git pull
-            nom
+            npm
             npm run build

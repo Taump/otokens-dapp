@@ -1,54 +1,71 @@
-import padEnd from "lodash.padend";
 import { Rate } from "antd";
 import React from "react";
-import styles from "./TokenItem.module.css";
-// eslint-disable-next-line max-len
-import { addFavoriteSymbol } from "../../../../store/actions/settings/addFavoriteSymbol";
-// eslint-disable-next-line max-len
-import { removeFavoriteSymbol } from "../../../../store/actions/settings/removeFavoriteSymbol";
 import { useDispatch } from "react-redux";
 
+import styles from "./TokenItem.module.css";
+import { addFavoriteSymbol } from "store/actions/settings/addFavoriteSymbol";
+import { removeFavoriteSymbol } from "store/actions/settings/removeFavoriteSymbol";
+import { changeActiveSymbol } from "store/actions/active/changeActiveSymbol";
+import { ICurrentSymbol } from "store/selectors/interfaces/currentSymbol.interface";
+
 export interface ITokenItem {
-  assetOrSymbol: string;
+  key: string;
   cutAssetOrSymbol: string;
-  support: number;
-  rivalSupport: number | null;
-  rate: boolean;
   isDispute: boolean;
+  sidebarType: "assets" | "symbols";
+
+  current: ICurrentSymbol;
 }
 
 export const TokenItem: React.FC<ITokenItem> = (props) => {
+  const { isDispute, cutAssetOrSymbol, sidebarType, current } = props;
+
   const {
-    support,
+    symbol,
+    currentSupport,
+    isFavorite,
+    currentAsset,
     rivalSupport,
-    rate,
-    isDispute,
-    cutAssetOrSymbol,
-    assetOrSymbol,
-  } = props;
+  } = current;
+
+  const assetOrSymbol = sidebarType === "assets" ? currentAsset : symbol;
 
   const dispatch = useDispatch();
+
   const handleChangeRate = () => {
-    if (props.rate) {
-      dispatch(removeFavoriteSymbol(assetOrSymbol));
+    if (isFavorite) {
+      dispatch(removeFavoriteSymbol(symbol));
     } else {
-      dispatch(addFavoriteSymbol(assetOrSymbol));
+      dispatch(addFavoriteSymbol(symbol));
     }
   };
+
   return (
     <div
       className={`${styles.tokenItem} ${
         isDispute ? styles.dispute : styles.notDispute
       }`}
     >
-      <div className={styles.assetOrSymbol}>{cutAssetOrSymbol}</div>
-      <div className={styles.support}>{(support / 1e9).toFixed(3)}</div>
-      <div className={styles.rivalSupport}>
-        {rivalSupport ? (rivalSupport / 1e9).toFixed(3) : "-"}
+      <div
+        className={styles.itemWrap}
+        onClick={() => dispatch(changeActiveSymbol(symbol))}
+      >
+        <div className={styles.assetOrSymbol} title={assetOrSymbol}>
+          {cutAssetOrSymbol}
+        </div>
+
+        <div className={styles.support}>
+          {(currentSupport / 1e9).toFixed(3)}
+        </div>
+
+        <div className={styles.rivalSupport}>
+          {rivalSupport ? (rivalSupport / 1e9).toFixed(3) : "-"}
+        </div>
       </div>
+
       <div className={styles.rateWrap}>
         <Rate
-          value={rate ? 1 : 0}
+          value={isFavorite ? 1 : 0}
           onChange={handleChangeRate}
           count={1}
           style={{ fontSize: 16 }}

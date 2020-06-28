@@ -1,4 +1,4 @@
 export default {
-  TESTNET: true,
-  ADDRESS: "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ",
+  TESTNET: process.env.REACT_APP_TESTNET === "true",
+  ADDRESS: process.env.REACT_APP_TOKEN_REGISTRY!,
 };

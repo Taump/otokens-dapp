@@ -3,8 +3,9 @@ import {
   MODAL_OPEN_ADD_SUPPORT,
 } from "../../types/modals";
 
-export const addSupportOpen = () => ({
+export const addSupportOpen = (symbol: string, asset: string) => ({
   type: MODAL_OPEN_ADD_SUPPORT,
+  payload: { symbol, asset },
 });
 
 export const addSupportClose = () => ({

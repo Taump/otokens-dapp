@@ -4,12 +4,11 @@
 }
 
 .option:hover{
-    background: #002549 ;
+    background: #002549;
     color: #ffffff;
 }
 
 .select{
-    width: 300px;
     color: #fff;
 }
 
@@ -24,6 +23,14 @@
 }
 
 .dropdown{
+    max-width: 100%;
+    padding-top: 10px;
     background-color: #001529;
     color: #ffffff;
+}
+
+@media (max-width: 840px) {
+    .select{
+        display: none;
+    }
 }

@@ -6,5 +6,6 @@ export interface IStore {
   modals: IModalsStore;
   data: IDataStore;
   settings: ISettingsStore;
+  active: string | null;
   _persist?: any;
 }

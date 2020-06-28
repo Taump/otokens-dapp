@@ -37,21 +37,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "lint": "ts",
     "prettier": "prettier --write 'src/**/*.(tsx|ts)'"
   },
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
       "react/jsx-no-target-blank": 0,
-      "max-len": [
-        "error",
-        {
-          "code": 80
-        },
-        {
-          "ignoreComments": true
-        }
-      ],
+      "max-len": "off",
       "quotes": [
         2,
         "double"
@@ -62,6 +55,7 @@
       ],
       "no-mixed-spaces-and-tabs": "error"
     }
+
   },
   "browserslist": {
     "production": [

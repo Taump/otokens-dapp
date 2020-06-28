@@ -1,10 +1,10 @@
-import config from "../../../config";
+import config from "config";
 
 import {
   LOAD_DATA_FAILURE,
   LOAD_DATA_REQUEST,
   LOAD_DATA_SUCCESS,
-} from "../../types/data";
+} from "store/types/data";
 
 import { ThunkActionWithArguments } from "../index.interface";
 import {
@@ -13,65 +13,12 @@ import {
   IDescriptions,
   IDrawers,
   ISupportLinks,
-} from "../../reducers/data.interface";
+} from "store/reducers/data.interface";
+import { regSymbol } from "../../../utils/regSymbol";
 
 export interface IStateVars {
   [key: string]: string;
 }
-//
-// export interface IAssetBalances {
-//   [key: string]: number;
-// }
-//
-// export interface IAsset {
-//   currentSymbol?: string;
-//   largestSymbol?: string;
-//   currentDescHash?: string;
-//   grace_expiry_ts?: number;
-//   expiry_ts?: number;
-//   balances?: IAssetBalances;
-// }
-//
-// export interface IAssets {
-//   [key: string]: IAsset;
-// }
-//
-// export interface ISymbol {
-//   currentAsset?: string;
-//   largestAsset?: string;
-//   expiry_ts?: number;
-// }
-//
-// export interface ISymbols {
-//   [key: string]: ISymbol;
-// }
-//
-// export interface IDescriptionSupport {
-//   [key: string]: number;
-// }
-//
-// export interface IDescription {
-//   decimals?: number;
-//   text?: string;
-//   support?: IDescriptionSupport;
-// }
-//
-// export interface IDescriptions {
-//   [key: string]: IDescription;
-// }
-//
-// export interface IDrawer {
-//   asset?: string;
-//   symbol?: string;
-//   address?: string;
-//   drawer?: number;
-//   support?: number;
-//   expiry_ts?: number;
-// }
-//
-// export interface IDrawers {
-//   [key: string]: IDrawer;
-// }
 
 export const getData: ThunkActionWithArguments = () => async (
   dispatch,
@@ -177,7 +124,8 @@ export const getData: ThunkActionWithArguments = () => async (
       const symbol = oSymbol.join("_");
       const link = symbol + "_" + asset;
       if (!(link in supportLinks)) supportLinks[link] = {};
-      supportLinks[link].support = Number(data[row]);
+      supportLinks[link] = { support: Number(data[row]), asset, symbol };
+
       //  2
     } else if (row.includes("balance_")) {
       const AdrAndAsset = row.split("_").slice(1);
@@ -195,6 +143,8 @@ export const getData: ThunkActionWithArguments = () => async (
       assets[asset].grace_expiry_ts = Number(data[row]);
     } else if (row.includes("_expiry_ts")) {
       const dataRow = row.split("_").slice(0, 4);
+      const address = dataRow[0];
+      const drawer = dataRow[1];
       const asset = dataRow[dataRow.length - 1];
       let oSymbol = [];
       for (let i = 2; i < dataRow.length - 1; i++) {
@@ -204,7 +154,10 @@ export const getData: ThunkActionWithArguments = () => async (
       const link = symbol + "_" + asset;
       drawers[link] = {
         ...drawers[link],
-        expiry_ts: Number(data[row]),
+        [address + "_" + drawer]: {
+          ...drawers[link][address + "_" + drawer],
+          expiry_ts: Number(data[row]),
+        },
       };
     } else if (row.includes("expiry_ts")) {
       const symbolOrAsset = row.split("_").slice(2)[0];
@@ -235,15 +188,43 @@ export const getData: ThunkActionWithArguments = () => async (
       const support = Number(data[row]);
       drawers[link] = {
         ...drawers[link],
-        address,
-        drawer,
-        asset,
-        symbol,
-        support,
+        [address + "_" + drawer]: { drawer, asset, symbol, support, address },
       };
     }
   }
-
+  for (let symbol in symbols) {
+    if (!regSymbol.test(symbol)) {
+      delete symbols[symbol];
+    }
+  }
+  for (let drawer in drawers) {
+    const currentDrawerByAddress = drawers[drawer];
+    for (let link in currentDrawerByAddress) {
+      const currentDrawer = currentDrawerByAddress[link];
+      if (currentDrawer.drawer !== 0) {
+        const { asset, symbol } = currentDrawer;
+        const supportLinkKey = symbol + "_" + asset;
+        const currentSupportLink = supportLinks[supportLinkKey];
+        if (currentSupportLink && currentDrawer.support)
+          if (currentSupportLink.lockSupport !== undefined) {
+            currentSupportLink.lockSupport += currentDrawer.support;
+          } else {
+            currentSupportLink.lockSupport = currentDrawer.support;
+          }
+      }
+    }
+    // if (
+    //   drawers[drawer].drawer !== 0 &&
+    //   drawers[drawer].symbol &&
+    //   drawers[drawer].asset &&
+    //   drawers[drawer].support
+    // ) {
+    //   if (drawer in supportLinks) {
+    //     supportLinks[drawer].support = drawers[drawer];
+    //   }
+    // }
+    // console.log(currentDrawer);
+  }
   dispatch({
     type: LOAD_DATA_SUCCESS,
     payload: { drawers, symbols, assets, descriptions, supportLinks },

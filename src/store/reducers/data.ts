@@ -1,4 +1,4 @@
-import { IActionData, IDataStore } from "./data.interface";
+import { IDataStore } from "./data.interface";
 import { AnyAction } from "redux";
 import {
   LOAD_DATA_FAILURE,

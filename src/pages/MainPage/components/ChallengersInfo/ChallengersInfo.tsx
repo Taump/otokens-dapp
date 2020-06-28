@@ -1,73 +1,142 @@
-import { Button, Table, Tabs } from "antd";
+import { Button, Table, Tabs, Tooltip } from "antd";
 import React from "react";
-
+import { useDispatch, useSelector } from "react-redux";
+import { createTokenOpen } from "store/actions/modals/createToken";
+import { IStore } from "store/reducers/index.interface";
+import { getChallengers, IChallengers } from "store/selectors/getChallengers";
+import { ISupportLink } from "store/reducers/data.interface";
+import { store } from "index";
+import { addSupportOpen } from "store/actions/modals/addSupport";
+import { ButtonLink } from "components/ButtonLink/ButtonLink";
+import { ChallengersInfoList } from "./components/ChallengersInfoList/ChallengersInfoList";
 const { TabPane } = Tabs;
 
-const dataSource = [
+const columnsBySymbol = [
   {
-    key: "1",
-    asset: "O3SyiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 32.363,
-    drawers: 3213.533,
+    title: (
+      <Tooltip title="Other symbols suggested for this asset">
+        <span style={{ borderBottom: "1px dotted #1890ff", cursor: "default" }}>
+          Symbol
+        </span>
+      </Tooltip>
+    ),
+    dataIndex: "symbol",
+    key: "symbol",
   },
   {
-    key: "2",
-    asset: "O3SyiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 212.383,
-    drawers: 123.473,
+    title: "Current support",
+    dataIndex: "support",
+    key: "support",
+    sorter: (a: any, b: any) => a.support - b.support,
+    sortDirections: ["descend", "ascend"],
+    defaultSortOrder: "descend",
+    render: (support: number) => {
+      return support / 1e9 + " GB";
+    },
   },
   {
-    key: "3",
-    asset: "O3SyiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 412.363,
-    drawers: 13.436,
+    title: "Support in drawers",
+    dataIndex: "lockSupport",
+    key: "lockSupport",
+    render: (support: number) => {
+      if (support) {
+        return support / 1e9 + " GB";
+      } else {
+        return "-";
+      }
+    },
   },
   {
-    key: "4",
-    asset: "fdsfsdiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 3212.353,
-    drawers: 43.434,
-  },
-  {
-    key: "5",
-    asset: "O3SyiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 13.332,
-    drawers: 166.423,
-  },
-  {
-    key: "6",
-    asset: "vsfgstruSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=",
-    cursupp: 1.333,
-    drawers: 1.433,
+    title: "Action",
+    key: "action",
+    render: (_t: any, record: ISupportLink) => {
+      return (
+        <ButtonLink
+          type="link"
+          onClick={() => {
+            if (record.symbol !== undefined && record.asset !== undefined) {
+              store.dispatch(addSupportOpen(record.symbol, record.asset));
+            }
+          }}
+        >
+          Add support
+        </ButtonLink>
+      );
+    },
   },
 ];
-
-const columns = [
+const columnsByAsset = [
   {
-    title: "Asset",
+    title: (
+      <Tooltip title="Other assets suggested for this symbol">
+        <span style={{ borderBottom: "1px dotted #1890ff", cursor: "default" }}>
+          Asset
+        </span>
+      </Tooltip>
+    ),
     dataIndex: "asset",
     key: "asset",
   },
   {
     title: "Сurrent support",
-    dataIndex: "cursupp",
-    key: "cursupp",
+    dataIndex: "support",
+    filterMultiple: false,
+    key: "support",
+    sorter: (a: any, b: any) => a.support - b.support,
+    sortDirections: ["descend", "ascend"],
+    defaultSortOrder: "descend",
+    render: (support: number) => {
+      return support / 1e9 + " GB";
+    },
   },
   {
     title: "Support in drawers",
-    dataIndex: "drawers",
-    key: "drawers",
+    dataIndex: "lockSupport",
+    key: "lockSupport",
+    render: (support: number) => {
+      if (support) {
+        return support / 1e9 + " GB";
+      } else {
+        return "-";
+      }
+    },
   },
   {
     title: "Action",
     key: "action",
-    render: () => {
-      return <a href="#">Add support</a>;
+    render: (_t: any, record: ISupportLink) => {
+      return (
+        <ButtonLink
+          type="link"
+          onClick={() => {
+            if (record.symbol !== undefined && record.asset !== undefined) {
+              store.dispatch(addSupportOpen(record.symbol, record.asset));
+            }
+          }}
+        >
+          Add support
+        </ButtonLink>
+      );
     },
   },
 ];
 
-export const ChallengersInfo = () => {
+export interface IChallengersInfo {
+  readonly currentSymbol: string;
+  readonly currentAsset: string;
+  readonly widthWindow: number;
+}
+
+export const ChallengersInfo: React.FC<IChallengersInfo> = ({
+  currentSymbol,
+  currentAsset,
+  widthWindow,
+}) => {
+  const dispatch = useDispatch();
+  const challengers: IChallengers = useSelector((state: IStore) =>
+    getChallengers(state, currentSymbol, currentAsset)
+  );
+
   return (
     <>
       <div
@@ -76,41 +145,75 @@ export const ChallengersInfo = () => {
           marginTop: 48,
           marginBottom: 24,
           justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <div style={{ fontSize: 26 }}>All challengers (24)</div>
-        <div>
-          <Button type="link" size="large">
-            Add new link
-          </Button>
-        </div>
+        <div style={{ fontSize: 26 }}>All links</div>
+        {widthWindow && widthWindow < 800 && (
+          <div>
+            <Button
+              type="link"
+              size="large"
+              onClick={() => dispatch(createTokenOpen())}
+            >
+              Add new link
+            </Button>
+          </div>
+        )}
       </div>
 
       <div>
         <Tabs defaultActiveKey="1" animated={false}>
-          <TabPane tab="DISPUTABLE ASSET" key="1">
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              size="small"
-              pagination={{ pageSize: 5 }}
-            />
+          <TabPane tab="COMPETING ASSETS" key="tab-1">
+            {widthWindow && widthWindow > 800 ? (
+              <Table
+                footer={() => (
+                  <ButtonLink
+                    onClick={() =>
+                      dispatch(createTokenOpen({ symbol: currentSymbol }))
+                    }
+                  >
+                    Add new
+                  </ButtonLink>
+                )}
+                dataSource={challengers.bySymbol}
+                // @ts-ignore
+                columns={columnsByAsset}
+                sortDirections={["ascend", "descend"]}
+                rowKey={(record: ISupportLink) =>
+                  "dis-asset-" + record.asset! + record.symbol + record.support
+                }
+                size="small"
+                pagination={{ pageSize: 5 }}
+              />
+            ) : (
+              <ChallengersInfoList data={challengers.bySymbol} />
+            )}
           </TabPane>
-          <TabPane tab="DISPUTABLE SYMBOL" key="2">
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              size="small"
-              pagination={{ pageSize: 3 }}
-            />
-          </TabPane>
-          <TabPane tab="MY LINKS" key="3">
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              size="small"
-              pagination={{ pageSize: 4 }}
-            />
+          <TabPane tab="COMPETING SYMBOLS" key="tab-2">
+            {widthWindow && widthWindow > 800 ? (
+              <Table
+                footer={() => (
+                  <ButtonLink
+                    onClick={() =>
+                      dispatch(createTokenOpen({ asset: currentAsset }))
+                    }
+                  >
+                    Add new
+                  </ButtonLink>
+                )}
+                dataSource={challengers.byAsset}
+                // @ts-ignore
+                columns={columnsBySymbol}
+                rowKey={(record: ISupportLink) =>
+                  "dis-symbol-" + record.asset! + record.symbol + record.support
+                }
+                size="small"
+                pagination={{ pageSize: 3 }}
+              />
+            ) : (
+              <ChallengersInfoList data={challengers.byAsset} />
+            )}
           </TabPane>
         </Tabs>
       </div>

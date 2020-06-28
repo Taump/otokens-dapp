@@ -1,117 +1,108 @@
-import { Button, Space, Table, Tabs } from "antd";
+import { Button, Space, Table } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
+import { IStore } from "store/reducers/index.interface";
+import {
+  getDescriptionsByAsset,
+  IDescriptionsByAsset,
+} from "store/selectors/getDescriptionsByAsset";
+import { ButtonLink } from "components/ButtonLink/ButtonLink";
+import { store } from "index";
+import { editInfoOpen } from "store/actions/modals/editInfo";
+import { generateLink } from "utils/generateLink";
+import { ChangeInfoList } from "./components/ChangeInfoList";
 
-const { TabPane } = Tabs;
+export interface IChangeInfo {
+  readonly currentAsset: string;
+  readonly currentSymbol: string;
+  readonly decimals?: number;
+  readonly description?: string;
+  readonly isActive?: boolean;
+  readonly activeWallet?: string;
+  readonly widthWindow: number;
+}
 
-const dataSource = [
-  {
-    key: "1",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 32.363,
-    decimals: 1,
-  },
-  {
-    key: "2",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 212.383,
-    decimals: 9,
-  },
-  {
-    key: "3",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 412.363,
-    decimals: 4,
-  },
-  {
-    key: "4",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 3212.353,
-    decimals: 5,
-  },
-  {
-    key: "5",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 13.332,
-    decimals: 6,
-  },
-  {
-    key: "6",
-    description:
-      "O3SyiBfkuSB/Lorem ipsum dolor sit amet" +
-      ", consectetur adipiscing elit. Nulla quam velit," +
-      " vulputate eu pharetra nec, mattis ac neque. Duis" +
-      " vulputate commodo lectus, ac blandit elit tincidunt " +
-      "id.+1Gm4GJZW8NLSg= Nulla quam velit, vulputate eu " +
-      "pharetra nec, mattis ac neque. ",
-    cursupp: 1.333,
-    decimals: 8,
-  },
-];
-
-const columns = [
-  {
-    title: "Description",
-    dataIndex: "description",
-    key: "description",
-  },
-  {
-    title: "Decimals",
-    dataIndex: "decimals",
-    key: "decimals",
-    width: 100,
-  },
-  {
-    title: "Сurrent support",
-    dataIndex: "cursupp",
-    key: "cursupp",
-    width: 150,
-  },
-  {
-    title: "Action",
-    key: "action",
-    width: 200,
-    render: () => {
-      return (
-        <Space>
-          <a href="#">Add support</a>
-          <a href="#">Edit</a>
-        </Space>
-      );
+export const ChangeInfo: React.FC<IChangeInfo> = ({
+  currentAsset,
+  currentSymbol,
+  isActive,
+  activeWallet,
+  widthWindow,
+}) => {
+  const columns = [
+    {
+      title: "Description",
+      dataIndex: "text",
+      key: "description",
     },
-  },
-];
+    {
+      title: "Decimals",
+      dataIndex: "decimals",
+      key: "decimals",
+      width: 100,
+    },
+    {
+      title: "Сurrent support",
+      dataIndex: "support",
+      key: "cursupp",
+      width: 150,
+      sorter: (a: any, b: any) => a.support - b.support,
+      sortDirections: ["descend", "ascend"],
+      defaultSortOrder: "descend",
+      render: (support: number) => {
+        return support / 1e9 + " GB";
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: 200,
+      render: (text: string, record: IDescriptionsByAsset) => {
+        return (
+          <Space>
+            <a
+              type="link"
+              // @ts-ignore
+              disabled={!isActive}
+              href={generateLink(
+                0.001 * 1e9,
+                {
+                  description: record.text,
+                  asset: record.asset,
+                  decimals: record.decimals,
+                },
+                activeWallet
+              )}
+            >
+              Vote
+            </a>
+            <ButtonLink
+              type="link"
+              disabled={!isActive}
+              onClick={() =>
+                store.dispatch(
+                  editInfoOpen(
+                    record.symbol,
+                    record.decimals,
+                    record.text,
+                    true
+                  )
+                )
+              }
+            >
+              Edit
+            </ButtonLink>
+          </Space>
+        );
+      },
+    },
+  ];
 
-export const ChangeInfo = () => {
+  const descriptions = useSelector<IStore, IDescriptionsByAsset[]>(
+    (state: IStore) =>
+      getDescriptionsByAsset(state, currentAsset, currentSymbol)
+  );
+
   return (
     <>
       <div
@@ -123,36 +114,41 @@ export const ChangeInfo = () => {
         }}
       >
         <div style={{ fontSize: 26 }}>
-          Voting for the description and decimals (12)
+          Voting for the description and decimals
         </div>
         <div>
-          <Button type="link" size="large">
+          <Button
+            type="link"
+            size="large"
+            disabled={!isActive}
+            onClick={() => {
+              store.dispatch(editInfoOpen(currentSymbol));
+            }}
+          >
             Edit information
           </Button>
         </div>
       </div>
-
       <div>
-        <Tabs defaultActiveKey="1" animated={false}>
-          <TabPane tab="ALL" key="1">
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              size="small"
-              pagination={{ pageSize: 5 }}
-              expandable={{ defaultExpandAllRows: true }}
-            />
-          </TabPane>
-          <TabPane tab="MY" key="2">
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              size="small"
-              pagination={{ pageSize: 3 }}
-              expandable={{ defaultExpandAllRows: true }}
-            />
-          </TabPane>
-        </Tabs>
+        {widthWindow && widthWindow > 800 ? (
+          <Table
+            dataSource={descriptions}
+            // @ts-ignore
+            columns={columns}
+            size="small"
+            pagination={{ pageSize: 5 }}
+            expandable={{ defaultExpandAllRows: true }}
+            rowKey={(record: IDescriptionsByAsset) =>
+              "discr-" + record.text! + record.decimals + record.support
+            }
+          />
+        ) : (
+          <ChangeInfoList
+            data={descriptions}
+            isActive={isActive}
+            activeWallet={activeWallet}
+          />
+        )}
       </div>
     </>
   );

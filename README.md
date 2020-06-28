@@ -1,4 +1,6 @@
-# Token registry
+# Token registry ui
+
+Link to website: https://tokens.ooo
 
 ## Install
 

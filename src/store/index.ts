@@ -7,8 +7,10 @@ import { modalsReducer } from "./reducers/modals";
 import { settingsReducer } from "./reducers/settings";
 
 import socket from "../services/socket";
+import { activeReducer } from "./reducers/active";
 
 const rootReducer = combineReducers({
+  active: activeReducer,
   data: dataReducer,
   modals: modalsReducer,
   settings: settingsReducer,
@@ -17,7 +19,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "tokens",
   storage,
-  whitelist: ["settings"],
+  whitelist: ["settings", "active"],
 };
 
 declare global {

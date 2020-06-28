@@ -1,20 +1,40 @@
 import React from "react";
 import { Button, Divider, Select } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./AddressSelector.module.css";
+import { addWalletOpen } from "store/actions/modals/addWallet";
+import { IStore } from "store/reducers/index.interface";
+import { changeActiveWalletAddress } from "store/actions/settings/changeActiveWalletAddress";
 
 const { Option } = Select;
 
 export interface IAddressSelector {}
 
 export const AddressSelector: React.FC<IAddressSelector> = () => {
+  const dispatch = useDispatch();
+
+  const wallets = useSelector<IStore, string[]>(
+    (state) => state.settings.wallets
+  );
+
+  const activeWallet = useSelector<IStore, string | undefined>(
+    (state) => state.settings.activeWallet
+  );
+
   return (
     <Select
       className={styles.select}
-      showSearch
       placeholder="Select an address"
       bordered={false}
+      value={activeWallet}
       dropdownClassName={styles.dropdown}
+      dropdownMatchSelectWidth={false}
+      onChange={(address) => {
+        if (typeof address === "string") {
+          dispatch(changeActiveWalletAddress(address));
+        }
+      }}
       dropdownRender={(menu) => (
         <div>
           {menu}
@@ -26,20 +46,25 @@ export const AddressSelector: React.FC<IAddressSelector> = () => {
             }}
           />
           <div style={{ paddingLeft: 5 }}>
-            <Button type="link">Add address</Button>
+            <Button type="link" onClick={() => dispatch(addWalletOpen())}>
+              Add address
+            </Button>
           </div>
         </div>
       )}
     >
-      <Option value="jack" bordered={false} className={styles.option}>
-        V321LXEXXYS4FZMXE3WNTT4E6XVU4IEL
-      </Option>
-      <Option value="lucy" bordered={false} className={styles.option}>
-        fdsTLXEXXYS4FZMXE3WNTT4E6XVU4IEL
-      </Option>
-      <Option value="tom" bordered={false} className={styles.option}>
-        KFMGLXEXXYS4FZMXE3WNTT4E6XVU4IEL
-      </Option>
+      {wallets &&
+        wallets.map((address: string, i: number) => {
+          return (
+            <Option
+              value={address}
+              key={"wallet-" + i + address}
+              className={styles.option}
+            >
+              {address}
+            </Option>
+          );
+        })}
     </Select>
   );
 };

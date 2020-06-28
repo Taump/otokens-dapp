@@ -1,9 +1,8 @@
 .header{
-    max-width: 100%;
     display: flex;
     overflow: hidden;
     position: fixed;
-    width: 100%;
+    width: 100vw;
     z-index: 99999;
 }
 
@@ -16,7 +15,6 @@
 
 
 .selectWrap{
-    max-width: 250px;
 }
 
 .menu{
@@ -26,11 +24,5 @@
 @media (max-width: 1200px){
     .header{
         z-index: 89;
-    }
-}
-
-@media (max-width: 760px){
-    .select{
-        display: none;
     }
 }

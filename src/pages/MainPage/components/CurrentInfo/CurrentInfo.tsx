@@ -1,34 +1,91 @@
 import { Button, Space } from "antd";
 import React from "react";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { ButtonLink } from "../../../../components/ButtonLink/ButtonLink";
+import { useWindowSize } from "hooks/useWindowSize";
+import { ButtonLink } from "components/ButtonLink/ButtonLink";
 import styles from "./CurrentInfo.module.css";
 import { useDispatch } from "react-redux";
-import { addSupportOpen } from "../../../../store/actions/modals/addSupport";
+import { addSupportOpen } from "store/actions/modals/addSupport";
+import { showAllDrawersOpen } from "store/actions/modals/showDrawers";
+import { editInfoOpen } from "store/actions/modals/editInfo";
+import { IDrawersAddress } from "store/reducers/data.interface";
+import { withdrawOpen } from "store/actions/modals/withdraw";
 
-export const CurrentInfo = () => {
+export interface ICurrentInfo {
+  currentSupport: number | undefined;
+  decimals: number | undefined;
+  description: string | undefined;
+  asset: string | undefined;
+  symbol: string | undefined;
+  drawerSupport: number;
+  status: "dispute" | "normal" | "resolved dispute";
+  drawers: IDrawersAddress;
+  activeWallet: string | undefined;
+  isActive?: boolean;
+}
+
+export const CurrentInfo: React.FC<ICurrentInfo> = ({
+  currentSupport,
+  decimals,
+  description,
+  asset,
+  status,
+  symbol,
+  drawerSupport,
+  activeWallet,
+  isActive,
+}) => {
   const dispatch = useDispatch();
   const [width] = useWindowSize();
   return (
     <Space direction="vertical" size="small" className={styles.currentInfo}>
       <div>
-        <b>Current support:</b> <ButtonLink>3242342</ButtonLink>
+        <b>Current support:</b>{" "}
+        <ButtonLink
+          onClick={() => {
+            dispatch(showAllDrawersOpen("all"));
+          }}
+        >
+          {currentSupport ? currentSupport / 1e9 : "-"} GB
+        </ButtonLink>
       </div>
       <div>
-        <b>Support in drawers:</b> <ButtonLink>123132</ButtonLink>
+        <b>Locked in drawers:</b>{" "}
+        {drawerSupport !== 0 ? (
+          <ButtonLink
+            onClick={() => {
+              dispatch(showAllDrawersOpen("lock"));
+            }}
+          >
+            {drawerSupport / 1e9 + " GB"}
+          </ButtonLink>
+        ) : (
+          0
+        )}
       </div>
       <div>
-        <b>Asset:</b>{" "}
-        <a href="#">O3SyiBfkuSB/0jzJiiss6DxBhjyjn+1Gm4GJZW8NLSg=</a>
+        <b>Current asset:</b>{" "}
+        {asset ? (
+          <a
+            target="_blank"
+            href={`https://testnetexplorer.obyte.org/?#${asset}`}
+          >
+            {asset}
+          </a>
+        ) : (
+          "-"
+        )}
       </div>
 
       <div>
         <Space size="large">
           <div>
-            <b>Decimals:</b> 9
+            <b>Decimals:</b> {decimals || "-"}
           </div>
           <div>
-            <b>Status:</b> disput
+            <b>Status:</b>{" "}
+            <span style={{ color: status === "normal" ? "green" : "red" }}>
+              {status}
+            </span>
           </div>
         </Space>
       </div>
@@ -36,28 +93,39 @@ export const CurrentInfo = () => {
         <div>
           <b>Description:</b>
         </div>
-        <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam
-          velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate
-          commodo lectus, ac blandit elit tincidunt id.
-        </span>
+        <span>{description || "-"}</span>
       </div>
       <div>
         <Space
           direction={width > 840 ? "horizontal" : "vertical"}
           size="middle"
         >
+          {symbol !== undefined && asset !== undefined && (
+            <Button
+              size="large"
+              type="primary"
+              onClick={() => dispatch(addSupportOpen(symbol, asset))}
+            >
+              Add support to the current link
+            </Button>
+          )}
           <Button
             size="large"
-            type="primary"
-            onClick={() => dispatch(addSupportOpen())}
+            disabled={!!description || !!decimals || !isActive}
+            onClick={() => dispatch(editInfoOpen(symbol))}
           >
-            Add support current link
+            Add information
           </Button>
-          <Button size="large">Edit information</Button>
-          <Button size="large" type="primary" danger>
-            Withdraw support
-          </Button>
+          {activeWallet && (
+            <Button
+              size="large"
+              type="primary"
+              danger
+              onClick={() => dispatch(withdrawOpen())}
+            >
+              Withdraw support
+            </Button>
+          )}
         </Space>
       </div>
     </Space>

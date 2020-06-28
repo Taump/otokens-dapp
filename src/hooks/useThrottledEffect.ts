@@ -1,12 +1,15 @@
 import { useEffect, useRef } from "react";
 
-export const useThrottledEffect =
-  (callback: ()=>void, delay: number, deps:any[] = []) => {
+export const useThrottledEffect = (
+  callback: () => void,
+  delay: number,
+  deps: any[] = []
+) => {
   const lastRan = useRef(Date.now());
 
   useEffect(
     () => {
-      const handler = setTimeout(function() {
+      const handler = setTimeout(function () {
         if (Date.now() - lastRan.current >= delay) {
           callback();
           lastRan.current = Date.now();
@@ -18,7 +21,7 @@ export const useThrottledEffect =
       };
     },
     // eslint-disable-next-line
-    [delay, ...deps],
+    [delay, ...deps]
   );
 };
 

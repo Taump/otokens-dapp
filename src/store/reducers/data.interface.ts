@@ -58,13 +58,18 @@ export interface IDrawer {
   support?: number;
   expiry_ts?: number;
 }
-
-export interface IDrawers {
+export interface IDrawersAddress {
   [key: string]: IDrawer;
+}
+export interface IDrawers {
+  [key: string]: IDrawersAddress;
 }
 
 export interface ISupportLink {
   support?: number;
+  symbol?: string;
+  asset?: string;
+  lockSupport?: number;
 }
 
 export interface ISupportLinks {

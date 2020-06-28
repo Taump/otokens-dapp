@@ -6,17 +6,25 @@
     background: #F9F9F9;
     justify-content: flex-start;
 }
-
+.headerWrap{
+    display: flex;
+    justify-content: flex-start;
+    width: 90%;
+}
 .assetOrSymbol{
-    width: 40%;
+    width: 46%;
+}
+
+.assetOrSymbol span{
+    cursor: pointer;
 }
 
 .support{
-    width: 25%;
+    width: 27%;
 }
 
 .rivalSupport{
-    width: 25%;
+    width: 27%;
 }
 
 .rate{
